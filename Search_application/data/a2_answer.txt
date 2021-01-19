@@ -1,0 +1,17 @@
+3.1 We use adjacency list to represent the graph.
+The node represents the city of the US.
+The edge represents the cost between cities(for example, the meal price in problem 3.4).
+We can search the graph using bfs or dfs or some other searching methods to find the required answer of the problem.
+
+3.2 DFS find the result in fewer steps.BFS find the shortest stops.
+Generally speaking,DFS usually find the result in fewer steps if the connectivity of the graph is good,because it usually can avoid unnecessary visits.And BFS usually find the shortest unit-path.
+When number of stops increases, BFS may find result in fewer steps.Because the number of unnecessary visits decreases.
+
+3.4 Theoretical the shortest path algorithm's time complexity is O(E+VlgV).
+But in my implementations the priority queue is implemented by binary heap,thus the decreaseKey operation's time complexity is not O(1),thus the overall complexity of algorithm is more than O(E+VlgV).
+If we can use fibonacci heap to implement the prority queue,we can achieve O(E+VlgV).
+
+If the number of cities increases,the V increases,so the complexity increases.
+If the number of stops is increased,the E increases,so the complexity increases.
+If the number of restaurants is increased,the time complexity almost remain the same,because we always choose the cheapest meal.And this is pre-calculated when read in data.
+

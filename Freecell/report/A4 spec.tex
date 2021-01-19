@@ -1,0 +1,865 @@
+\documentclass[12pt]{article}
+
+\usepackage{graphicx}
+\usepackage{paralist}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{hhline}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{multicol}
+
+\oddsidemargin 0mm
+\evensidemargin 0mm
+\textwidth 160mm
+\textheight 200mm
+\renewcommand\baselinestretch{1.0}
+
+\pagestyle {plain}
+\pagenumbering{arabic}
+
+\newcounter{stepnum}
+
+%% Comments
+
+\usepackage{color}
+
+\newif\ifcomments\commentstrue
+
+\ifcomments
+\newcommand{\authornote}[3]{\textcolor{#1}{[#3 ---#2]}}
+\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+\else
+\newcommand{\authornote}[3]{}
+\newcommand{\todo}[1]{}
+\fi
+
+\newcommand{\wss}[1]{\authornote{blue}{SS}{#1}}
+
+\title{Assignment 4, Part 1, Specification}
+\author{Shengchen Zhou,400050783}
+
+\begin {document}
+
+\maketitle
+
+This document is the MIS for Assignment 4 which implements a model of FreeCell poker card game.
+
+
+\newpage
+
+\section* {Poker Card Meta Types Module}
+
+\subsection*{Module}
+
+PokerCardMetaTypes
+
+\subsection* {Uses}
+
+N/A
+
+\subsection* {Syntax}
+
+\subsubsection* {Exported Constants}
+
+None
+
+\subsubsection* {Exported Types}
+
+RankT = \{Ace, Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King\}\\ 
+SuitT = \{Diamonds, Clubs, Hearts, Spades\}\\
+ColrT = \{Red, Black\}
+
+\subsubsection* {Exported Access Programs}
+
+None
+
+\subsection* {Semantics}
+
+\subsubsection* {State Variables}
+
+None
+
+\subsubsection* {State Invariant}
+
+None
+
+\newpage
+%_______________________________________________________________________________
+\section* {Poker Card Module}
+
+\subsection*{Module}
+
+PokerCard
+
+\subsection* {Uses}
+
+PokerCardMetaTypes
+
+\subsection* {Syntax}
+
+\subsubsection* {Exported Types}
+
+PokerCard = ?
+
+\subsubsection* {Exported Access Programs}
+
+\begin{tabular}{| l | l | l | l |}
+\hline
+\textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
+\hline
+PokerCard & RankT, SuitT & PokerCard & \\
+\hline
+r & ~ & RankT & ~\\
+\hline
+s & ~ &SuitT & ~\\
+\hline
+c & ~ &ColrT & ~\\
+\hline
+operator == & PokerCard, PokerCard & $\mathbb{B}$ & ~\\
+\hline
+\end{tabular}
+
+\subsection* {Semantics}
+
+\subsubsection* {State Variables}
+
+$R$: RankT\\
+$S$: SuitT
+
+\subsubsection* {State Invariant}
+
+None
+
+\subsubsection* {Assumptions}
+
+The constructor PokerCard is called for each object instance before any other
+access routine is called for that object.  The constructor cannot be called on
+an existing object.
+
+\subsubsection* {Access Routine Semantics}
+
+PokerCard(r,s):
+\begin{itemize}
+\item transition: $R, S := r, s$
+\item output: $out := \mathit{self}$
+\item exception: None
+\end{itemize}
+
+\noindent r():
+\begin{itemize}
+\item output: $out := R$
+\item exception: None
+\end{itemize}
+
+\noindent s():
+\begin{itemize}
+\item output: $out := S$
+\item exception: None
+\end{itemize}
+
+\noindent c():
+\begin{itemize}
+\item output: $out := Red(if s()==Diamonds||Hearts), Black(if s()==Clubs||Spades)$
+\item exception: None
+\end{itemize}
+
+\noindent operator ==:
+\begin{itemize}
+\item output: $out := this.S == c.S$ \&\& $this.R == c.R$
+\item exception: None
+\end{itemize}
+\newpage
+%_____________________________________________________________________________________________
+\section* {Poker Card Sequence Module}
+
+\subsection*{Module}
+
+PokerCardSeq
+
+\subsection* {Uses}
+
+PokerCard
+
+\subsection* {Syntax}
+
+\subsubsection* {Exported Types}
+
+PokerCardSeq = ?
+
+\subsubsection* {Exported Access Programs}
+
+\begin{tabular}{| l | l | l | l |}
+\hline
+\textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
+\hline
+PokerCardSeq & ~ & PokerCardSeq & \\ 
+\hline
+init & PokerCard & ~ & \\ 
+\hline
+lastCard & ~ & PokerCard & GetCardOp\_Illegal\\
+\hline
+card & $\mathbb{N}$ & PokerCard & GetCardOp\_Illegal\\
+\hline
+addCard & PokerCard & ~ & ~\\
+\hline
+removeLastCard & ~ & ~ & RemoveCardOp\_Illegal \\
+\hline
+size & ~ & $\mathbb{N}$ & ~\\
+\hline
+
+\end{tabular}
+
+\subsection* {Semantics}
+
+\subsubsection* {State Variables}
+
+$S$: array of PokerCards
+
+\subsubsection* {State Invariant}
+
+None
+
+\subsubsection* {Assumptions}
+
+\begin{itemize}
+\item The constructor PokerCardSeq is called for each object instance before any other
+access routine is called for that object.  The constructor cannot be called on
+an existing object.
+\end{itemize}
+
+\subsubsection* {Access Routine Semantics}
+
+PokerCardSeq():
+\begin{itemize}
+\item output: $out := \mathit{self}$
+\item exception: None
+\end{itemize}
+
+\noindent init(s):
+\begin{itemize}
+\item transition: $S=s$
+\item exception: None
+\end{itemize}
+
+\noindent lastCard():
+\begin{itemize}
+\item output: $out := S.back()$
+\item exception: S.empty $\Rightarrow$ GetCardOp\_Illegal
+\end{itemize}
+
+\noindent card(i):
+\begin{itemize}
+\item output: $out := S[i]$
+\item exception: i+1>size() $\Rightarrow$ GetCardOp\_Illegal
+\end{itemize}
+
+\noindent addCard(c):
+\begin{itemize}
+\item transition: $S.push\_back(c)$
+\item exception: None
+\end{itemize}
+
+\noindent removeLastCard():
+\begin{itemize}
+\item transition: $PokerCardSeq=S.pop\_back$
+\item exception: S.empty $\Rightarrow$ RemoveCardOp\_Illegal
+\end{itemize}
+
+\noindent size():
+\begin{itemize}
+\item output: $out := S.size()$
+\item exception: None
+\end{itemize}
+
+\newpage
+%_______________________________________________________________________
+\section* {Poker Card Foundation Module}
+
+\subsection*{Module}
+
+PokerCardFoundation
+
+\subsection* {Uses}
+
+PokerCard, PokerCardSeq
+
+\subsection* {Syntax}
+
+\subsubsection* {Exported Types}
+
+PokerCardFoundation = ?
+
+\subsubsection* {Exported Access Programs}
+
+\begin{tabular}{| l | l | l | l |}
+\hline
+\textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
+\hline
+PokerCardFoudation & ~  & PokerCardFoudation & ~\\
+\hline
+canAppendCard & PokerCard & $\mathbb{B}$ & ~\\
+\hline
+appendCard & PokerCard & ~ & AddCardOp\_Illegal\\
+\hline
+card & $\mathbb{N}$ & PokerCard & GetCardOp\_Illegal\\
+\hline
+removeCard & ~ & ~ & GetCardOp\_Illegal\\
+\hline
+size & ~ & $\mathbb{N}$ & ~\\
+\hline
+canMoveCard2 & $PokerCardFreeCell\|$ & $\mathbb{B}$ & ~\\
+~&$PokerCardPile\|$ & ~ &~\\
+~&$PokerCardFoundation$ & ~ &~\\
+\hline
+moveCard & PokerCardFreeCell & $\mathbb{B}$ & ~\\
+~&$PokerCardPile\|$ & ~ &~\\
+~&$PokerCardFoundation$ & ~ &~\\
+\hline
+\end{tabular}
+
+\subsection* {Semantics}
+
+\subsubsection* {State Variables}
+
+$S$: sequence of pokercards
+
+\subsubsection* {State Invariant}
+
+None
+
+\subsubsection* {Assumptions}
+
+The constructor PokerCardFoundation is called for each object instance before any other
+access routine is called for that object.  The constructor cannot be called on
+an existing object.
+
+\subsubsection* {Access Routine Semantics}
+
+PokerCardFoundation():
+\begin{itemize}
+\item output: $out := \mathit{self}$
+\item exception: None
+\end{itemize}
+
+\noindent canAppendCard(c):
+\begin{itemize}
+\item output: $out := \mathbb{B}$
+\item exception: None
+\end{itemize}
+
+\noindent appendCard(c):
+\begin{itemize}
+\item transition: $S.addCard(c)$
+\item exception: !canAppendCard(c) $\Rightarrow$ AddCardOp\_Illegal
+\end{itemize}
+
+\noindent card(i):
+\begin{itemize}
+\item output: $out := S.card(i)$
+\item exception: i+1>size() $\Rightarrow$ GetCardOp\_Illegal
+\end{itemize}
+
+\noindent removeCard():
+\begin{itemize}
+\item transition $S.removeLastCard()$
+\item exception: S.size()==0 $\Rightarrow$ RemoveCardOp\_Illegal
+\end{itemize}
+
+\noindent size():
+\begin{itemize}
+\item output: $out := S.size()$
+\item exception: None
+\end{itemize}
+
+\noindent canMoveCard2(c):
+\begin{itemize}
+\item output: $out := S.size()!=0 \&\& canAppendCard(C)$
+\item determine if able to move a PokerCard to a freecell or pile or foundation
+\item exception: None
+\end{itemize}
+
+\noindent moveCard2(c):
+\begin{itemize}
+\item transition: $C=S.lastCard()$
+\item output: $out :=  \mathbb{B}$
+\item move a pokecard to a freecell or pile or foundation
+\item exception: None
+\end{itemize}
+
+\newpage
+%__________________________________________________________________________
+
+\section* {Poker Card Pile Module}
+
+\subsection* {Module}
+
+PokerCardPile
+
+\subsection* {Uses}
+
+PokerCard, PokerCardSeq
+
+\subsection* {Syntax}
+
+\subsubsection* {Exported Types}
+
+PokerCardPile = ?
+
+\subsubsection* {Exported Constants}
+
+None
+
+\subsubsection* {Exported Access Programs}
+
+\begin{tabular}{| l | l | l | p{5cm} |}
+\hline
+\textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
+\hline
+PokerCardPile & ~  & PokerCardPile & \\
+\hline
+init & PokerCardSeq & ~ & \\
+\hline
+card & $\mathbb{N}$ & PokerCard & GetCardOp\_Illegal\\
+\hline
+canAppendCard & PokerCard & $\mathbb{B}$ & \\
+\hline
+appendCard & PokerCard & ~ & AddCardOp\_Illegal\\
+\hline
+removeCard & ~ & ~ & RemoveCardOp\_Illegal\\
+\hline
+size &  & $\mathbb{N}$ & \\
+\hline
+canMoveCard2 & $PokerCardFreeCell\|$ & $\mathbb{B}$ & ~\\
+~&$PokerCardPile\|$ & ~ &~\\
+~&$PokerCardFoundation$ & ~ &~\\
+\hline
+moveCard & PokerCardFreeCell & $\mathbb{B}$ & ~\\
+~&$PokerCardPile\|$ & ~ &~\\
+~&$PokerCardFoundation$ & ~ &~\\
+\hline
+\end{tabular}
+
+\subsection* {Semantics}
+
+\subsubsection* {State Variables}
+
+$S$: seq of pokercards\\
+
+
+\subsubsection* {State Invariant}
+
+None
+
+\subsubsection* {Assumptions}
+
+\begin{itemize}
+\item The PokerCardPile constructor is called for each object instance before any
+other access routine is called for that object.  The constructor can only be
+called once.
+\end{itemize}
+
+\subsubsection* {Access Routine Semantics}
+
+PokerCardPile():
+\begin{itemize}
+\item output: $out := \mathit{self}$
+\item exception: None
+\end{itemize}
+
+\noindent init(s):
+\begin{itemize}
+\item transition: $S.init(s)$
+\item exception: None
+\end{itemize}
+
+\noindent card(i):
+\begin{itemize}
+\item output: $out := S.card(i)$
+\item exception: i+1>size() $\Rightarrow$ GetCardOp\_Illegal
+\end{itemize}
+
+\noindent canAppendCard(c):
+\begin{itemize}
+\item output: $out := \mathbb{B}$
+\item exception: None
+\end{itemize}
+
+\noindent appendCard(c):
+\begin{itemize}
+\item transition: $S.addCard(c)$
+\item exception: !canAppendCard(c) $\Rightarrow$ AddCardOp\_Illegal
+\end{itemize}
+
+\noindent removeCard():
+\begin{itemize}
+\item transition $S.removeLastCard()$
+\item exception: S.size()==0 $\Rightarrow$ RemoveCardOp\_Illegal
+\end{itemize}
+
+\noindent size():
+\begin{itemize}
+\item output: $out := S.size()$
+\item exception: None
+\end{itemize}
+
+\noindent canMoveCard2(c):
+\begin{itemize}
+\item output: $out := S.size()!=0 \&\& canAppendCard(C)$
+%determine if able to move a PokerCard to a freecell or pile or foundation
+\item exception: None
+\end{itemize}
+
+\noindent moveCard2(c):
+\begin{itemize}
+\item transition: $C=S.lastCard()$
+\item output: $out :=  S.size() != 0 \&\& canAppendCard(C)$
+%move a pokecard to a freecell or pile or foundation
+\item exception: None
+\end{itemize}
+
+
+\newpage
+%_____________________________________________________________
+\section* {Poker Card Free Cell Module}
+
+\subsection* {Module}
+
+PokerCardFreeCell
+
+\subsection* {Uses}
+
+PokerCard, PokerCardSeq
+
+\subsection* {Syntax}
+
+\subsubsection* {Exported Types}
+
+PokerCardFreeCell = ?
+
+\subsubsection* {Exported Constants}
+
+None
+
+\subsubsection* {Exported Access Programs}
+
+\begin{tabular}{| l | l | l | p{5cm} |}
+\hline
+\textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
+\hline
+PokerCardFreeCell & ~  & & \\
+\hline
+canAppendCard & PokerCard & $\mathbb{B}$ & \\
+\hline
+appendCard & PokerCard & ~ & AddCardOp\_Illegal\\
+\hline
+card & $\mathbb{N}$ & PokerCard & GetCardOp\_Illegal\\
+\hline
+removeCard & ~ & ~ & RemoveCardOp\_Illegal\\
+\hline
+size &  & $\mathbb{N}$ & \\
+\hline
+canMoveCard2 & $PokerCardFreeCell\|$ & $\mathbb{B}$ & ~\\
+~&$PokerCardPile\|$ & ~ &~\\
+~&$PokerCardFoundation$ & ~ &~\\
+\hline
+moveCard & PokerCardFreeCell & $\mathbb{B}$ & ~\\
+~&$PokerCardPile\|$ & ~ &~\\
+~&$PokerCardFoundation$ & ~ &~\\
+\hline
+\end{tabular}
+
+\subsection* {Semantics}
+
+\subsubsection* {State Variables}
+
+$S$: seq of pokercards\\
+
+
+\subsubsection* {State Invariant}
+
+None
+
+\subsubsection* {Assumptions}
+
+\begin{itemize}
+\item PokerCardFreeCell constructor is called for each object instance before any
+other access routine is called for that object.  The constructor can only be
+called once.
+\end{itemize}
+
+\subsubsection* {Access Routine Semantics}
+
+PokerCardFreeCell():
+\begin{itemize}
+\item output: $out := \mathit{self}$
+\item exception: None
+\end{itemize}
+
+\noindent canAppendCard(c):
+\begin{itemize}
+\item output: $out := S.size()!=0 \Rightarrow false$
+\item exception: None
+\end{itemize}
+
+\noindent appendCard(c):
+\begin{itemize}
+\item transition: $S.addCard(c)$
+\item exception: !canAppendCard(c) $\Rightarrow$ AddCardOp\_Illegal
+\end{itemize}
+
+\noindent card(i):
+\begin{itemize}
+\item output: $out := S.card(0)$
+\item exception: none
+\end{itemize}
+
+\noindent removeCard():
+\begin{itemize}
+\item transition $S.removeLastCard()$
+\item exception: S.size()==0 $\Rightarrow$ RemoveCardOp\_Illegal
+\end{itemize}
+
+\noindent size():
+\begin{itemize}
+\item output: $out := S.size()$
+\item exception: None
+\end{itemize}
+
+\noindent canMoveCard2(c):
+\begin{itemize}
+\item output: $out := S.size()!=0 \&\& canAppendCard(C)$
+\item determine if able to move a PokerCard to a freecell or pile or foundation
+\item exception: None
+\end{itemize}
+
+\noindent moveCard2(c):
+\begin{itemize}
+\item transition: $C=S.lastCard()$
+\item output: $out :=  \mathbb{B}$
+\item move a pokecard to a freecell or pile or foundation
+\item exception: None
+\end{itemize}
+\newpage
+%__________________________________________________________
+\section* {Game Deck Module}
+
+\subsection* {Module}
+
+GameDeck
+
+\subsection* {Uses}
+
+PokerCardFoudation, PokerCardPile, PokerCardFreeCell
+
+\subsection* {Syntax}
+
+\subsubsection* {Exported Types}
+
+GameDeck = ?
+
+\subsubsection* {Exported Constants}
+
+None
+
+\subsubsection* {Exported Access Programs}
+
+\begin{tabular}{| l | l | l | p{5cm} |}
+\hline
+\textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
+\hline
+GameDeck & PokerCardFreeCell  & GameDeck & \\
+~&PokerCardPile&~&~\\
+~&PokerCardFoundation&~&~\\
+\hline
+init &  & ~ & \\
+\hline
+cell & $\mathbb{N}$ & PokerCardFreeCell & Ind\_Illegal\\
+\hline
+pile & $\mathbb{N}$ & PokerCardPile & Ind\_Illegal\\
+\hline
+foundation & $\mathbb{N}$ & PokerCardFoundation & Ind\_Illegal\\
+\hline
+canFreeCell2FreeCell & $\mathbb{N}$, $\mathbb{N}$ & $\mathbb{B}$ & Ind\_Illegal\\
+\hline
+freeCell2FreeCell & $\mathbb{N}$, $\mathbb{N}$ & $\mathbb{B}$ & Ind\_Illegal\\
+\hline
+canPile2Pile & $\mathbb{N}$, $\mathbb{N}$ & $\mathbb{B}$ & Ind\_Illegal\\
+\hline
+pile2Pile & $\mathbb{N}$, $\mathbb{N}$ & $\mathbb{B}$ & Ind\_Illegal\\
+\hline
+canFoundation2Foundation & $\mathbb{N}$, $\mathbb{N}$ & $\mathbb{B}$ & Ind\_Illegal\\
+\hline
+foundation2Foundation & $\mathbb{N}$, $\mathbb{N}$ & $\mathbb{B}$ & Ind\_Illegal\\
+\hline
+canFreeCell2Pile & $\mathbb{N}$, $\mathbb{N}$ & $\mathbb{B}$ & Ind\_Illegal\\
+\hline
+freeCell2Pile & $\mathbb{N}$, $\mathbb{N}$ & $\mathbb{B}$ & Ind\_Illegal\\
+\hline
+canPile2FreeCell & $\mathbb{N}$, $\mathbb{N}$ & $\mathbb{B}$ & Ind\_Illegal\\
+\hline
+pile2FreeCell & $\mathbb{N}$, $\mathbb{N}$ & $\mathbb{B}$ & Ind\_Illegal\\
+\hline
+canFreeCell2Foundation & $\mathbb{N}$, $\mathbb{N}$ & $\mathbb{B}$ & Ind\_Illegal\\
+\hline
+freeCell2Foundation & $\mathbb{N}$, $\mathbb{N}$ & $\mathbb{B}$ & Ind\_Illegal\\
+\hline
+canPile2Foundation & $\mathbb{N}$, $\mathbb{N}$ & $\mathbb{B}$ & Ind\_Illegal\\
+\hline
+Pile2Foundation & $\mathbb{N}$, $\mathbb{N}$ & $\mathbb{B}$ & Ind\_Illegal\\
+\hline
+validMoves &  & $\mathbb{B}$ & \\
+\hline
+winning &  & $\mathbb{B}$ & \\
+\hline
+\end{tabular}
+
+\subsection* {Semantics}
+
+\subsubsection* {State Variables}
+
+$C$: PokerCardFreeCell\\
+$P$: PokerCardPile\\
+$F$: PokerCardFoundation\\
+
+\subsubsection* {State Invariant}
+
+None
+
+\subsubsection* {Assumptions}
+
+\begin{itemize}
+\item The init() can only be called once.
+\end{itemize}
+
+\subsubsection* {Access Routine Semantics}
+GameDeck(c,p,f):
+\begin{itemize}
+\item transition: $C[i]=c[i], P[i]=p[i], F[i]=f[i]$
+\item exception: None
+\end{itemize}
+
+\noindent init():
+\begin{itemize}
+\item transition:
+\item exception: None
+\end{itemize}
+
+\noindent cell(i)
+\begin{itemize}
+\item output: $out := C[i]$
+\item exception: i+1>NC $\Rightarrow$ Ind\_Illegal
+\end{itemize}
+
+\noindent pile(i):
+\begin{itemize}
+\item output: $out := P[i]$
+\item exception: i+1>NP $\Rightarrow$ Ind\_Illegal
+\end{itemize}
+
+
+\noindent foundation(i):
+\begin{itemize}
+\item output: $out := F[i]$
+\item exception: i+1>NP $\Rightarrow$ Ind\_Illegal
+\end{itemize}
+
+\noindent canFreeCell2FreeCell(i1,i2):
+\begin{itemize}
+\item output: $out :=  this\rightarrow C[i1].canMoveCard2(\& this \rightarrow C[i2])$
+\item exception: $i1+1>NC \| i2+1>NC \Rightarrow Ind\_Illegal$
+\end{itemize}
+
+\noindent FreeCell2FreeCell(i1,i2):
+\begin{itemize}
+\item output: output: $out :=  this\rightarrow C[i1].moveCard2(\& this \rightarrow C[i2])$
+\item exception: $i1+1>NC \| i2+1>NC \Rightarrow Ind\_Illegal$
+\end{itemize}
+
+\noindent canPile2Pile(i1,i2):
+\begin{itemize}
+\item output: output: $out :=  this\rightarrow P[i1].canMoveCard2(\& this \rightarrow P[i2])$
+\item exception: $i1+1>NP \| i2+1>NP \Rightarrow Ind\_Illegal$
+\end{itemize}
+
+\noindent pile2Pile(i1,i2):
+\begin{itemize}
+\item output: $out :=  this\rightarrow P[i1].moveCard2(\& this \rightarrow P[i2])$
+\item exception: $i1+1>NP \| i2+1>NP \Rightarrow Ind\_Illegal$
+\end{itemize}
+
+\noindent canFreeCell2Pile(i1,i2):
+\begin{itemize}
+\item output: $out :=  this\rightarrow C[i1].canMoveCard2(\& this \rightarrow P[i2])$
+\item exception: $i1+1>NC \| i2+1>NP \Rightarrow Ind\_Illegal$
+\end{itemize}
+
+\noindent FreeCell2Pile(i1,i2):
+\begin{itemize}
+\item output: $out :=  this\rightarrow C[i1].moveCard2(\& this \rightarrow P[i2])$
+\item exception: $i1+1>NC \| i2+1>NP \Rightarrow Ind\_Illegal$
+\end{itemize}
+
+\noindent canPile2FreeCell(i1,i2):
+\begin{itemize}
+\item output: $out :=  this\rightarrow P[i1].canMoveCard2(\& this \rightarrow C[i2])$
+\item exception: $i1+1>NP \| i2+1>NC \Rightarrow Ind\_Illegal$
+\end{itemize}
+
+\noindent pile2FreeCell(i1,i2):
+\begin{itemize}
+\item output: $out :=  this\rightarrow P[i1].moveCard2(\& this \rightarrow C[i2])$
+\item exception: $i1+1>NP \| i2+1>NC \Rightarrow Ind\_Illegal$
+\end{itemize}
+
+\noindent canFreeCell2Foundation(i1,i2)
+\begin{itemize}
+\item output: $out :=  this\rightarrow C[i1].canMoveCard2(\& this \rightarrow F[i2])$
+\item exception: $i1+1>NC \| i2+1>NF \Rightarrow Ind\_Illegal$
+\end{itemize}
+
+\noindent freeCell2Foundation(i1,i2):
+\begin{itemize}
+\item output: $out :=  this\rightarrow C[i1].moveCard2(\& this \rightarrow F[i2])$
+\item exception: $i1+1>NC \| i2+1>NF \Rightarrow Ind\_Illegal$
+\end{itemize}
+
+\noindent canPile2Foundation(i1,i2):
+\begin{itemize}
+\item output: $out :=  this\rightarrow P[i1].canMoveCard2(\& this \rightarrow F[i2])$
+\item exception: $i1+1>NP \| i2+1>NF \Rightarrow Ind\_Illegal$
+\end{itemize}
+
+\noindent pile2Foundation(i1,i2):
+\begin{itemize}
+\item output: $out :=  this\rightarrow P[i1].moveCard2(\& this \rightarrow F[i2])$
+\item exception: $i1+1>NP \| i2+1>NF \Rightarrow Ind\_Illegal$
+\end{itemize}
+
+\noindent validMoves():
+\begin{itemize}
+\item output: $out :=  \mathbb{B}$
+\item exception: None
+\end{itemize}
+
+\noindent Winning()
+\begin{itemize}
+\item output: $out :=  \mathbb{B}$
+\item exception: None
+\end{itemize}
+
+
+\subsection*{Exceptions}
+
+\noindent Ind\_Illegal
+
+\noindent GetCardOp\_Illegal
+
+\noindent RemoveCardOp\_Illegal
+
+\noindent AddCardOp\_Illegal
+
+\newpage
+
+
+\end {document}

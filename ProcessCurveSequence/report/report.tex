@@ -1,0 +1,320 @@
+\documentclass[12pt]{article}
+
+\usepackage{graphicx}
+\usepackage{paralist}
+\usepackage{listings}
+\usepackage{booktabs}
+
+\oddsidemargin 0mm
+\evensidemargin 0mm
+\textwidth 160mm
+\textheight 200mm
+
+\pagestyle {plain}
+\pagenumbering{arabic}
+
+\newcounter{stepnum}
+
+\title{Assignment 2 Report}
+\author{Shengchen Zhou--zhous20}
+\date{March 3, 2018}
+
+\begin {document}
+
+\maketitle
+
+ This report contains following contents:\\
+  1. Description of Test Cases\\
+  2. Testing results of my code and partner's code.\\
+  3.  A further discussion on my code and partner's code.\\
+  4.  Problems about The Specification.\\
+  5.  Specification Comparison against A1.\\
+  6.  Answers to Questions
+
+\section{Testing of the Original Program}
+Brief discription of test cases:\\
+\large SeqSerivces.py: \\
+\normalsize 1. isAscending(X)\\
+\phantom{xx}  Corner case: test scenario of $X_{(i+1)}=X_i$\\
+\phantom{xx}  Exception: n/a\\
+\\
+2.isInBounds(X, x)\\
+\phantom{xx}  Corner case: test scenario of $X_{(i+1)}=X_i$\\
+\phantom{xx}  Exception: n/a\\
+\\
+3. interpLin(x1, y1, x2, y2, x)\\
+\phantom{xx}  Corner case: test scenario of $x_1=x_2$ , which will give divide-by-zero error (ZeroDivisionError to be specific)\\
+\phantom{xx}  Exception: n/a\\
+\\
+4. interpQuad(x1, y1, x2, y2, x)\\
+\phantom{xx}  Corner case: test scenario of $x_0=x_2$ or $x_1=x_2$, which will give divide-by-zero error (ZeroDivisionError to be specific)\\
+\phantom{xx}  Exception: n/a\\
+\\
+5.index(X, x)\\
+\phantom{xx}  Corner case: test scenario of $X_{(i+1)}=X_i$ , which is ignored as it will possibly lead to no index returned and there are no relevant assumptions specified. (‘ignored’ means the test function will bypass the testing.)\\
+\phantom{xx}  Exception: n/a\\
+\\
+\large CurveADT.py:\\
+\normalsize 1. new CurveT(X, Y, i)\\
+\phantom{xx}  Corner case: n/a\\
+\phantom{xx}  Exception: IndepVarNotAscending / SeqSizeMismatch / InvalidInterpOrder\\
+\\
+2. minD()\\
+\phantom{xx}  Corner case: n/a\\
+\phantom{xx}  Exception: n/a\\
+\\
+3. maxD()\\
+\phantom{xx}  Corner case: n/a\\
+\phantom{xx}  Exception: n/a\\
+\\
+4. order()\\
+\phantom{xx}  Corner case: n/a\\
+\phantom{xx}  Exception: n/a\\
+\\
+5. eval(x)\\
+\phantom{xx}  Corner case: as for the wrapped local function interp(X, Y, o, v), if i = 0, then $X_{(i-1)}$ will not exist, which implies it should be automatically incremented by one in this case, which is i = 1.\\
+\phantom{xx}  Exception: OutOfDomain\\
+\\
+6.  dfdx(x)\\
+\phantom{xx}  Corner case: n/a\\
+\phantom{xx}  Exception: OutOfDomain\\
+\\
+7. d2fdx2(x)\\
+\phantom{xx}  Corner case: n/a\\
+\phantom{xx}  Exception: OutOfDomain\\
+\\
+\large Data.py:\\
+\normalsize 1. Data\_init()\\
+\phantom{xx}  Corner case: n/a\\
+\phantom{xx}  Exception: n/a\\
+\\
+2. Data\_add()\\
+\phantom{xx}  Corner case: n/a\\
+\phantom{xx}  Exception: IndepVarNotAscending\\
+\\
+3. Data\_getC()\\
+\phantom{xx}  Corner case: n/a\\
+\phantom{xx}  Exception: InvalidIndex\\
+\\
+4. Data\_eval()\\
+\phantom{xx} Corner case: n/a\\
+\phantom{xx}  Exception: OutOfDomain\\
+\\
+5. Data\_slice()\\
+\phantom{xx}  Corner case: n/a\\
+\phantom{xx}  Exception: n/a\\
+\\
+\Large Output in ubuntu terminal:\\
+\normalsize
+src/test\_All.py ..................................................   [100\%]\\
+----------- coverage: platform linux, python 3.5.2-final-0 -----------\\
+Name \hspace{26ex}                        Stmts\hspace{4ex}    Miss\hspace{3ex}    Cover\\
+---------------------------------------------------------------------------------\\
+src/A2Examples.py\hspace{17ex}22\hspace{8ex}22\hspace{6ex}0\%\\
+src/CurveADT.py     \hspace{17ex}            71 \hspace{8ex}0\hspace{4ex}   100\%\\
+src/Data.py             \hspace{23ex}            41 \hspace{7ex}     0 \hspace{3ex}  100\%\\
+src/Exceptions.py    \hspace{17ex}             12\hspace{8ex}      0 \hspace{3ex}   100\%\\
+src/Load.py           \hspace{23ex}              40\hspace{7ex}     40\hspace{6ex}       0\%\\
+src/Plot.py            \hspace{24ex}              23\hspace{7ex}     23 \hspace{5ex}      0\%\\
+src/SeqServices.py   \hspace{17ex}           38\hspace{8ex}      1\hspace{5ex}      97\%\\
+src/test\_All.py        \hspace{20ex}           217\hspace{8ex}      4 \hspace{4ex}     98\%\\
+----------------------------------------------------------------------------------\\
+TOTAL           \hspace{27ex}                   464 \hspace{6ex}    90  \hspace{3ex}   81\%\\
+========== 50 passed in 1.69 seconds ==========\\
+
+Summary of results:\\
+The results look good. (further discussion see below)\\
+
+
+\section{Results of Testing Partner's Code}
+
+partner/test\_All.py ..................................................   [100\%]\\
+----------- coverage: platform linux, python 3.5.2-final-0 -----------\\
+Name \hspace{26ex}                        Stmts\hspace{4ex}    Miss\hspace{3ex}    Cover\\
+---------------------------------------------------------------------------------\\
+src/A2Examples.py\hspace{17ex}22\hspace{8ex}22\hspace{6ex}0\%\\
+src/CurveADT.py     \hspace{17ex}            40 \hspace{8ex}2\hspace{4ex}   95\%\\
+src/Data.py             \hspace{23ex}            30 \hspace{7ex}     1 \hspace{4ex}  97\%\\
+src/Exceptions.py    \hspace{17ex}             12\hspace{8ex}      0 \hspace{3ex}   100\%\\
+src/Load.py           \hspace{23ex}              40\hspace{7ex}     40\hspace{6ex}       0\%\\
+src/Plot.py            \hspace{24ex}              23\hspace{7ex}     23 \hspace{5ex}      0\%\\
+src/SeqServices.py   \hspace{17ex}           15\hspace{8ex}      0\hspace{4ex}      100\%\\
+src/test\_All.py        \hspace{20ex}           217\hspace{7ex}      17 \hspace{4ex}     92\%\\
+----------------------------------------------------------------------------------\\
+TOTAL           \hspace{27ex}                   399 \hspace{5ex}    105  \hspace{3ex}   74\%\\
+================ FAILURES =============\\
+… (detailed outputs omitted here)\\
+=========12 failed, 38 passed in 2.11 seconds========\\
+
+
+\section{Discussion of Test Results}
+
+\subsection{Problems with Original Code}
+The results look good, don’t see a single failed case, and the uncovered lines (3\% for SeqServices.py) are not relevant for the code's functionality.\\
+All corner cases and exceptions have been thoroughly tested according to the content of last section: “Brief description of test cases”, please check it for details.\\
+\\
+\subsection{Problems with Partner's Code}
+The results look problematic, there are a few failed cases, not to mention the code coverage. The spotted problems are listed as follows:\\
+\\
+\large SeqSerivces.py\\
+\normalsize for index(X, x)\\
+The formula: $X_i\leq x < X_(i+1)$ has been incorrectly implemented as $X_i \leq x \leq X_{(i+1)}$, in this case, index can be return only when there the condition:\\ $X_i=x=X_{(i+1)}$ get satisfied.\\
+Because as a basic helper function, the index(X, x) is wrongly implemented, so unfortunately most of the functions which are dependent on it will not be able to be tested until it get fixed.\\
+\\
+\large CurveADT.py\\
+\normalsize for new CurveT(X, Y, i) / dfdx(x) / d2fdx2(x)\\
+Incorrect way to implement the ‘Exported Constants’.\\
+When define a module level constant, there is no need to declare it as global.\\
+Unfortunately, same as above, the constant is such a fundamental thing, any methods which are using them will be able to be tested.\\
+for eval(x)\\
+Just as mentioned in previous section: ‘Brief description of test cases’, when i = 0, the local function: interp(X, Y, o, v) should increment it to 1 in order to run quadratic interpolation algorithm. \\
+The partner’s function failed to do so.\\
+Even though this is not specified in instruction mandatorily, but I think it’s very obvious that it should be taken care of.\\
+\\
+\large Data.py\\
+\normalsize for Data\_add(s, z)\\
+The exception ‘FULL’ is not found in the Data module, which thus lead to a ‘NameError’. Which is proved to be a typo, this exception should be called ‘Full’ instead of its original all uppercase form.\\
+In order to inspect further about partner’s code, apparently the wrongly defined SeqSerivces.index(X, x), the inappropriately defined constants, and the miscalled exception type prevent Pytest checking other parts, I tried to fix these three exposed issues for partner and then re-test it.\\
+\\
+Here is the testing result after a simple fix:\\
+\\
+\\
+\\
+partner/test\_All.py ..................................................   [100\%]\\
+----------- coverage: platform linux, python 3.5.2-final-0 -----------\\
+Name \hspace{26ex}                        Stmts\hspace{4ex}    Miss\hspace{3ex}    Cover\\
+---------------------------------------------------------------------------------\\
+src/A2Examples.py\hspace{17ex}22\hspace{8ex}22\hspace{6ex}0\%\\
+src/CurveADT.py     \hspace{17ex}            42 \hspace{8ex}0\hspace{4ex}   100\%\\
+src/Data.py             \hspace{23ex}            30 \hspace{7ex}     0 \hspace{4ex}  100\%\\
+src/Exceptions.py    \hspace{17ex}             12\hspace{8ex}      0 \hspace{3ex}   100\%\\
+src/Load.py           \hspace{23ex}              40\hspace{7ex}     40\hspace{6ex}       0\%\\
+src/Plot.py            \hspace{24ex}              23\hspace{7ex}     23 \hspace{5ex}      0\%\\
+src/SeqServices.py   \hspace{17ex}           15\hspace{8ex}      0\hspace{4ex}      100\%\\
+src/test\_All.py        \hspace{20ex}           217\hspace{7ex}      5 \hspace{4ex}     98\%\\
+----------------------------------------------------------------------------------\\
+TOTAL           \hspace{27ex}                   401 \hspace{5ex}    90  \hspace{3ex}   78\%\\
+================ FAILURES =============\\
+… (detailed outputs omitted here)\\
+=========1 failed, 49 passed in 2.11 seconds========\\
+
+\subsection{Problems with Assignment Specification}
+\large SeqSerivces.py:\\
+\\
+\normalsize index(X, x)\\
+The assumptions of ‘isAscending(X) is True’ as well as ‘isInBounds(X, x) is True’ cannot avoid the situation of ‘no index get returned’ when there exists at least one pair of two adjacent value: $X_{(i+1)}=X_i$, as there could be no x to satisfy $X_(i+1) \leq x<X_i$.\\
+\\
+	interpLin(x1, y1, x2, y2, x)\\
+There is one missed assumption: ‘$x_1≠x_2$’, given that two identical x values would lead to a divide-by-zero error.\\
+\\
+	interpQuad(x1, y1, x2, y2, x)\\
+Same as interpLin(x1, y1, x2, y2, x), there are two missed assumptions: ‘$x_0≠x_2$’ and ‘$x_1≠x_2$’, the divide-by-zero error would be raised.\\
+\\
+\large CurveADT.py:\\
+\normalsize	interp(X, Y, o, v) (used in eval(x))\\
+When i = 0, there is no $X_{(i-1)}$, hence a supplement logic should be implemented to let i be automatically incremented by one in this case, so there will be sufficient three points for a quadratic interpolation.\\
+Furthermore, in interp(X, Y, o, v) or eval(), there is a need to check the number of points in sequence, for o = 1, at least two points are required; for o = 2, at least three points are required. This requirements could become assumptions or we could prepare the function to raise a relevant exception.
+
+\subsection{Specification Comparison against A1}
+
+In Assignment 1, the concept of ‘Sequence’ is defined as a standalone ADT class, which has its own ‘add’, ‘rm’, ‘set’, ‘get’, ‘size’ and ‘indexInSeq’ methods. However, in Assignment 2, we have to make use of the raw List type in python, and a ‘Sequence Services’ module to provide utility functions, i.e. ‘isAscending’, ‘isInBounds’, ‘interpLin’, ‘interQuad’, and ‘index’ to operate on it. In Assignment 1 we may need to implement our own way to do ‘isAscending’ and ‘isInBounds’. In addition, the ‘interpLin’ and ‘interQuad’  works well when it comes to implementing the CurveT.\\
+In Assignment 1, the CurveT instance is initialized by a datafile, and only interpolation/evaluation methods are provided. In contrast, the Assignment 2 strips off the data reading functionality, the CurveT instance now can be explicitly initialized by two sequences and an order instead.\\
+The CurveT class in Assignment 1 doesn’t include a curve’s order, and it doesn’t give any methods to access the domain information of the independent variable. But in Assignment 2, we have all of it.\\
+
+\section{Answers}
+
+\begin{enumerate}
+
+\item What is the mathematical specification of the \texttt{SeqServices} access
+  program isInBounds(X, x) if the assumption that X is ascending is removed?\\
+  
+  If the assumption of ‘X is ascending’ is removed, then we cannot ensure that the first value of X sequence is the smallest one, and the last value of X sequence is the greatest one, thus, we will have difficulty checking if the given x is in the bounds. The only way to solve this is iterating all values to find the min and the max ones to clarify the bounds.\\
+
+\item How would you modify \texttt{CurveADT.py} to support cubic interpolation?\\
+
+Since I use scipy.interpolate.interp1d() to help define the interpLin(x1, y1, x2, y2, x) and the interpQuad(x0, y0, x1, y1, x2, y2, x) functions in SeqServices, I could easily adopt the same approach to implement a third interpCubic(x0, y0, x1, y1, x2, y2, x3, y3, x) one. Apparently I need to provide three points instead of three or two, to let it performs the cubic interpolation.  The core line will be: interpolate.interp1d(X, Y, kind='cubic').
+After finishing implementing this basic function, I could use it in CurveT’s local function interp(X, Y, o, v), just make sure that it's called only when the given order is 3 and the input sequence also has enough points.
+Finally I simply wrap the interp(X, Y, o, v) in CurveT.eval(x), the only additional thing to do there is to check exceptions, such as ‘OutOfDomain’ (existed) and ‘NotEnoughPoints’ (possible new exception for having no enough points).\\
+
+
+\item What is your critique of the CurveADT module's interface.  In particular,
+  comment on whether the exported access programs provide an interface that is
+  consistent, essential, general, minimal and opaque.
+  
+  From the ‘minimal’ aspect, we might separate the derivative calculation from the encapsulation, i.e. dfdx(x) and d2fdx2(x). The DX constant doesn't need to be included in the class and a delta x value for computing derivatives is not a mandatory part of a curve.\\
+From other perspectives, it looks good.\\
+
+
+\item What is your critique of the Data abstract object's interface.  In
+  particular, comment on whether the exported access programs provide an
+  interface that is consistent, essential, general, minimal and opaque.\\
+  
+  It’s easy to get the domain of x from a CurveT interface, but we cannot tell the domain of Z as it is a private field of Data. Therefore it might be necessary to provide two accessors, e.g. ‘Data\_minZ()’ and ‘Data\_maxZ()’, so that we could be able to tell if a given z is invalid before calling ‘Data\_add(s, z)’ and ‘Data\_eval(x, z)’.\\
+Everything else seems appropriate.\\
+
+
+\end{enumerate}
+
+\newpage
+
+\lstset{language=Python, basicstyle=\tiny, breaklines=true, showspaces=false,
+  showstringspaces=false, breakatwhitespace=true}
+
+\def\thesection{\Alph{section}}
+
+\section{Code for CurveADT.py}
+
+\noindent \lstinputlisting{../src/CurveADT.py}
+
+\newpage
+
+\section{Code for Data.py}
+
+\noindent \lstinputlisting{../src/Data.py}
+
+\newpage
+
+\section{Code for SeqServices.py}
+
+\noindent \lstinputlisting{../src/SeqServices.py}
+
+\newpage
+
+\section{Code for Plot.py}
+
+\noindent \lstinputlisting{../src/Plot.py}
+
+\newpage
+
+\section{Code for Load.py}
+
+\noindent \lstinputlisting{../src/Load.py}
+
+\newpage
+
+\section{Code for Partner's CurveADT.py}
+
+
+\noindent \lstinputlisting{../partner/CurveADT.py}
+
+\newpage
+
+\section{Code for Partner's Data.py}
+
+
+\noindent \lstinputlisting{../partner/Data.py}
+
+\newpage
+
+\section{Code for Partner's SeqServices.py}
+
+\noindent \lstinputlisting{../partner/SeqServices.py}
+
+\newpage
+
+\section{Makefile}
+
+\lstset{language=make}
+\noindent \lstinputlisting{../Makefile}
+
+\end {document}
